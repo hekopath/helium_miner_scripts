@@ -3,11 +3,11 @@
 # Script for auto updating the helium miner.
 
 # Set default values
-MINER=miner
-REGION=US915
+MINER=helium-miner
+REGION=EU868
 GWPORT=1680
 MINERPORT=44158
-DATADIR=/home/pi/miner_data
+DATADIR=/opt/miner_data
 LOGDIR=
 QUAY_URL='https://quay.io/api/v1/repository/team-helium/miner/tag/?limit=20&page=1&onlyActiveTags=true'
 GA=GA

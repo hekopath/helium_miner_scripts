@@ -4,7 +4,7 @@
 
 # Set default values
 MINER=miner
-REGION=US915
+REGION=EU868
 GWPORT=1680
 MINERPORT=44158
 DATADIR=/home/pi/miner_data
