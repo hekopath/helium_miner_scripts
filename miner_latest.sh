@@ -12,7 +12,7 @@ LOGDIR=
 QUAY_URL='https://quay.io/api/v1/repository/team-helium/miner/tag/?limit=20&page=1&onlyActiveTags=true'
 GA=GA
 DEV=/dev/i2c-1:/dev/i2c-1
-SYS=/opt/gateway_config/releases
+SYS=/opt/gateway_config/releases/0.1.0
 #The alternative to GA is GA=64_202
 
 # Make sure we have the latest version of the script
