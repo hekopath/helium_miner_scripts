@@ -12,6 +12,7 @@ LOGDIR=
 QUAY_URL='https://quay.io/api/v1/repository/team-helium/miner/tag/?limit=20&page=1&onlyActiveTags=true'
 GA=GA
 DEV=/dev/i2c-1:/dev/i2c-1
+SYS=/opt/gateway_config/releases
 #The alternative to GA is GA=64_202
 
 # Make sure we have the latest version of the script
@@ -23,7 +24,7 @@ function update-git {
 command -v jq > /dev/null || sudo apt-get install jq curl -y
 
 # Read switches to override any default values for non-standard configs
-while getopts n:g:p:d:l:r:d: flag
+while getopts n:g:p:d:l:r:d:s: flag
 do
    case "${flag}" in
       n) MINER=${OPTARG};;
@@ -34,6 +35,7 @@ do
       r) REGION=${OPTARG};;
       a) GA=${OPTARG};;
       d) DEV=${OPTARG};;
+      s) SYS=${OPTARG};;
       *) echo "Exiting"; exit;;
    esac
 done
@@ -126,11 +128,11 @@ docker run -d --init --env REGION_OVERRIDE="$REGION" --restart always --publish 
 
 if [ "$GWPORT" -ne 1680 ] || [ "$MINERPORT" -ne 44158 ]; then
    echo "Using nonstandard ports, adjusting miner config"
-   docker exec "$MINER" sed -i "/^  {blockchain,/{N;s/$/\n      {port, $MINERPORT},/}; s/1680/$GWPORT/" /opt/miner/releases/0.1.0/sys.config
+   docker exec "$MINER" sed -i "/^  {blockchain,/{N;s/$/\n      {port, $MINERPORT},/}; s/1680/$GWPORT/" $SYS/sys.config
 fi
 
 echo "Increasing memory limit for snapshots. See https://discord.com/channels/404106811252408320/730245219974381708/851336745538027550"
-docker exec "$MINER" sed -i 's/{key, undefined}$/{key, undefined},{snapshot_memory_limit, 1000}/' /opt/miner/releases/0.1.0/sys.config
+docker exec "$MINER" sed -i 's/{key, undefined}$/{key, undefined},{snapshot_memory_limit, 1000}/' $SYS/sys.config
 docker restart "$MINER"
 
 update-git
